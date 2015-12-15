@@ -1,0 +1,64 @@
+<?php
+use App\Custom\Active\ActiveForm;
+?>
+
+<?php $__env->startSection('css'); ?>
+<link href="<?php echo e(url(asset('public/assets/css/demo.min.css'))); ?>" rel="stylesheet" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('crumb'); ?>
+<ul class="breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="<?php echo e(url()); ?>">Home</a>
+    </li>
+    <li>
+        <a href="<?php echo e(url('admin/review')); ?>">Review</a>
+    </li>
+   
+ </ul>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="row">  
+        <div class="col-xs-12 col-sm-12 col-xs-12">
+            <div class="title">Creater: <?php echo e($review->creater->name); ?></div> 
+            <div class="title">Created for: <?php echo e($review->user->name); ?></div>                                
+            <style type="text/css">
+                .title {
+                    font-size: 48px;
+                    margin-bottom: 40px;
+                    font-family: 'Lato';
+                }
+            </style>
+        </div>
+    </div>
+    <div class="row">  
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="well with-header">
+                <div class="header bordered-themeprimary"><?php echo e($review->user->name); ?>'s Mark</div>
+                <div class="knob-container">
+                    <input name="point" data-readonly="true" disabled class="knob" data-angleoffset=185 data-linecap=round data-fgcolor="#5DB2FF" value="<?php echo e($review->point); ?>" data-thickness=".15">
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-xs-12">
+            <div class="widget flat">
+                <div class="widget-header bordered-bottom bordered-platinum">
+                    <span class="widget-caption">Comment</span>
+                </div><!--Widget Header-->
+                <div class="widget-body">
+                    <?php echo $review->comment; ?>
+
+                </div><!--Widget Body-->
+            </div><!--Widget-->
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script src="<?php echo e(url(asset('public/assets/js/knob/jquery.knob.js'))); ?>"></script>
+<script type="text/javascript">
+    $(".knob").knob();
+</script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('html.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

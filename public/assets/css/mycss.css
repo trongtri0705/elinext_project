@@ -1,0 +1,19 @@
+.page-body .col-lg-12{
+	padding-left: 0;
+}
+.help-block{
+	color: #e46f61 !important;
+}
+.well.with-footer{
+	padding-bottom: 52px !important;
+}
+
+.profile-container .profile-header .header-avatar {
+    width: 100% !important;
+    height: 100% !important;
+}
+.navbar .navbar-inner .navbar-header .navbar-account .account-area>li .dropdown-menu.dropdown-login-area>li .avatar-area .avatar {
+    
+     height: auto !important; 
+} 
+.child-table td{box-shadow:none !important;}

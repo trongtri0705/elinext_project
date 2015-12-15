@@ -1,0 +1,77 @@
+<?php $__env->startSection('content'); ?>
+<?php echo $__env->make('html.block.message', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<div class="col-xs-12 col-sm-12 col-xs-12">
+	<div class="well with-footer">
+		<div class="header bordered-blue">
+			<div class="btn-group">
+				<a class="btn btn-primary " href="javascript:void(0);">Create Manager</a>
+				<a class="btn btn-primary  dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><i class="fa fa-angle-down"></i></a>
+				<ul class="dropdown-menu dropdown-primary">
+					<li>
+						<a href="<?php echo e(url('admin/create-new-manager')); ?>">New</a>						
+					</li>
+					<li>
+						<a href="<?php echo e(url('admin/create-manager')); ?>">From Current Staffs</a>
+					</li>
+				</ul>				
+			</div>
+			<div class="btn-group">
+				<a class="btn btn-primary " href="javascript:void(0);">Create Leader</a>
+				<a class="btn btn-primary  dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);"><i class="fa fa-angle-down"></i></a>
+				<ul class="dropdown-menu dropdown-primary">
+					<li>
+						<a href="<?php echo e(url('admin/create-new-leader')); ?>">New</a>						
+					</li>
+					<li>
+						<a href="<?php echo e(url('admin/create-leader')); ?>">From Current Staffs</a>
+					</li>
+				</ul>				
+			</div>
+		</div>
+	</div>	
+</div>
+<?php foreach($model as $item): ?>
+<div class="col-xs-12 col-md-6 col-lg-6">
+	<div class="widget">
+		<div class="widget-header ">
+			<span class="widget-caption"><?php echo e($item->name); ?></span>
+			<div class="widget-buttons">
+				<a href="#" data-toggle="maximize">
+					<i class="fa fa-expand"></i>
+				</a>
+				<a href="#" data-toggle="collapse">
+					<i class="fa fa-minus"></i>
+				</a>
+				<a href="#" data-toggle="dispose">
+					<i class="fa fa-times"></i>
+				</a>
+			</div>
+		</div>
+		<div class="widget-body">
+			<div id="<?php echo e($item->name); ?>" class="chart donut-chart chart-lg"></div>
+		</div>
+	</div>
+</div>
+<?php endforeach; ?>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+<script src="<?php echo e(url(asset('public/assets/js/charts/morris/raphael-2.0.2.min.js'))); ?>"></script>
+<script src="<?php echo e(url(asset('public/assets/js/charts/morris/morris.js'))); ?>"></script>
+<script src="<?php echo e(url(asset('public/assets/js/charts/morris/morris-init.js'))); ?>"></script>
+<?php foreach($model as $item): ?>
+<script type="text/javascript">	
+	Morris.Donut({
+		element: "<?php echo e($item->name); ?>",
+		data: [ 
+		{ label: 'Developer', value: <?php if(@count($item->user)>0): ?> <?php echo e(@round(@count($item->developer)*100/count($item->user), 2)); ?><?php else: ?> <?php echo e(0); ?> <?php endif; ?>, },       
+		{ label: 'Leader', value: <?php if(@count($item->user)>0): ?> <?php echo e(@round(@count($item->leader)*100/count($item->user), 2)); ?><?php else: ?> <?php echo e(0); ?> <?php endif; ?> },
+		{ label: 'Manager', value: <?php if(@count($item->user)>0): ?> <?php echo e(@round(@count($item->manager)*100/count($item->user), 2)); ?><?php else: ?> <?php echo e(0); ?> <?php endif; ?> }     
+		],
+		colors: [themeprimary, themesecondary, themethirdcolor, themefourthcolor],
+		formatter: function (y) { return y + "%" }
+	});
+</script>
+<?php endforeach; ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('html.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

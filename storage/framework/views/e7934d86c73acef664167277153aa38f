@@ -1,0 +1,180 @@
+<?php $__env->startSection('content'); ?>
+	<div class="row">			
+		<div class="col-xs-12 col-md-12">    	
+			<?php echo $__env->make('html.block.message', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>	
+		</div>
+	</div>
+	<?php if(Auth::user()->teamdetail): ?>
+		<?php foreach(Auth::user()->teamdetail as $key => $value): ?> 				
+			<div class="row">			
+				<div class="col-xs-12 col-md-12">    	
+					<div class="widget">
+						<div class="widget-header ">
+							<span class="widget-caption">Team's Name: <a class="themeprimary"><?php echo e($value->team->name); ?></a>   -   Average score: 
+							<?php $sum=0;?>
+							<?php foreach($value->team->detail as $key => $item): ?>
+								<?php $temp = 0; $count = 0; ?>			
+								<?php foreach($item->account->score as $key => $review): ?> 
+									<?php if(date('m',strtotime($review->created_at))==date("m")): ?>								
+										<?php 
+											$count++;
+											$temp+=($review->point);
+										?>										
+									<?php endif; ?>
+								<?php endforeach; ?>
+								<?php if($count>0): ?>																	
+									<?php $sum+=($temp/$count)?>									
+								<?php endif; ?>
+							<?php endforeach; ?>
+							<a class="themesecondary"><?php echo e(($sum+$value->team->creater->review->first()['point'])/(count($value->team->detail)+1)); ?></a>
+							</span>
+							<div class="widget-buttons">
+								<a href="#" data-toggle="maximize">
+									<i class="fa fa-expand"></i>
+								</a>
+								<a href="#" data-toggle="collapse">
+									<i class="fa fa-minus"></i>
+								</a>
+								<a href="#" data-toggle="dispose">
+									<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="widget-body">
+							<table class="table table-striped table-bordered table-hover" id="<?php echo e($value->id); ?>">
+								<thead>
+									<tr>
+										<th>
+											Name
+										</th>                            
+										<th>
+											Age
+										</th>
+										<th>Email</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr>
+										<td>
+											<a class="themesecondary">Creater:<?php echo $value->team->creater->name; ?></a>
+										</td>
+										<td>
+											<?php echo e(substr(date('Ymd')-date('Ymd', strtotime($value->team->creater['account']['birthday'])), 0, -4)); ?>
+
+
+										</td>                            										
+										<td>
+											<?php echo e($value->team->creater->account['email']); ?>
+
+										</td>
+										<td>
+											<?php if(!(($value->team->creater->review->first()['reviewer_id']==Auth::user()->id) && date('m',strtotime($value->team->creater->review->first()['created_at']))==date("m"))): ?>
+                                                <a href="<?php echo URL('admin/review/create/'.$value->team->creater->id); ?>" class="btn btn-azure graded btn-xs update"><i class="fa fa-play"></i> Make Review</a>
+                                            <?php else: ?>
+                                            	<a class="themesecondary">Viewed</a>	
+                                            <?php endif; ?>                                                                                       
+										</td>
+									</tr>
+									<?php foreach($value->team->detail as $key => $item): ?>
+									<tr>
+										<td>
+											<?php echo $item->account->name; ?>
+
+										</td>
+										<td>
+											<?php echo e(substr(date('Ymd')-date('Ymd', strtotime($item->account->birthday)), 0, -4)); ?>
+
+
+										</td> 
+										<td>
+											<?php echo e($item->account->email); ?>
+
+										</td>
+										<td>
+										<?php if($item->account->id!=Auth::user()->id): ?>
+											<?php if(!(($item->account->review->first()['reviewer_id']==Auth::user()->id) && date('m',strtotime($item->account->review->first()['created_at']))==date("m"))): ?>
+                                                <a href="<?php echo URL('admin/review/create/'.$item->account->id); ?>" class="btn btn-azure graded btn-xs update"><i class="fa fa-play"></i> Make Review</a>
+                                            <?php else: ?>
+                                            	<a class="themesecondary">Viewed</a>	
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                        	<a class="themeprimary">You're here</a>                                            
+                                        <?php endif; ?>                                       
+										</td>
+
+									</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>			
+		<?php endforeach; ?>
+	<?php else: ?>
+	<div class="title">You're free now, wait for someone adding you on.</div>                                
+    <style type="text/css">
+        .title {
+            font-size: 48px;
+            margin-bottom: 40px;
+            font-family: 'Lato';
+        }
+    </style>
+	<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<?php if(Auth::user()->teamdetail): ?>
+	<?php foreach(Auth::user()->teamdetail as $key => $value): ?> 
+		<script type="text/javascript">    
+		    var oTable = $("#<?php echo e($value->id); ?>").dataTable({
+		            "sDom": "Tflt<'row DTTTFooter'<'col-sm-6'i><'col-sm-6'p>>",
+		             "aLengthMenu": [
+		                    [5, 15, 25, -1],
+		                    [5, 15, 25, "All"]
+		                    ],
+		                    "iDisplayLength": 5,
+		            "oTableTools": {
+		                "aButtons": [
+		                {
+		                    'sExtends': 'xls', 
+		                    "mColumns": [0,1],
+		                    "oSelectorOpts": { filter: 'applied', order: 'current',page: 'current', }
+		                }, 
+		                {
+		                    'sExtends': 'pdf', 
+		                    "mColumns": [0,1],
+		                    "oSelectorOpts": { filter: 'applied', order: 'current',page: 'current', }
+		                }, 
+		                {
+		                    'sExtends': 'print',
+		                    "bShowAll": false, 
+		                    "mColumns": [0,1],
+		                    "oSelectorOpts": { filter: 'applied', order: 'current',page: 'current', }
+		                }
+		                ],
+		            "sSwfPath": "<?php echo e(url('public/assets/swf/copy_csv_xls_pdf.swf')); ?>"
+		                
+		            },
+		            "language": {
+		                "search": "",
+		                "sLengthMenu": "_MENU_",
+		                "oPaginate": {
+		                    "sPrevious": "Prev",
+		                    "sNext": "Next"
+		                }
+		            },
+		            "aoColumns": [
+		            null,
+		            null, 
+		            { "bSortable": false },   		           
+		            { "bSortable": false }, 
+		            ],
+		            "aaSorting": []
+		        });		        
+		</script>	
+	<?php endforeach; ?>
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('html.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,104 @@
+<?php
+use App\Custom\Active\ActiveForm;
+?>
+
+<?php $__env->startSection('css'); ?>
+<link href="<?php echo e(url(asset('public/assets/css/demo.min.css'))); ?>" rel="stylesheet" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('crumb'); ?>
+<ul class="breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="<?php echo e(url()); ?>">Home</a>
+    </li>
+    <li>
+        <a href="<?php echo e(url('admin/review')); ?>">Review</a>
+    </li>
+    <li class="active"><?php if(isset($review)): ?>
+        Edit
+        <?php else: ?>
+        Create
+        <?php endif; ?></li>
+    </ul>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('content'); ?>  
+    <?php echo Form::open(array('method' => 'post', 'class' => 'form-horizontal','id'=>'fupload', 'files'=> true)); ?>      
+    <!-- Tabs Content --> 
+    <div class="row">  
+        <div class="col-xs-12 col-sm-12 col-xs-12">
+            <div class="title">Create Review for: <?php echo e($user->name); ?></div>                                
+            <style type="text/css">
+                .title {
+                    font-size: 48px;
+                    margin-bottom: 40px;
+                    font-family: 'Lato';
+                }
+            </style>
+        </div>
+    </div>
+    <div class="row">  
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="well with-header">
+                <div class="header bordered-themeprimary"> Give a mark</div>
+                <div class="knob-container">                        
+                    <input name="point" class="knob" data-angleoffset=185 data-linecap=round data-fgcolor="#5DB2FF" value="1" data-thickness=".15">
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-xs-12">
+            <div class="widget flat radius-bordered">
+                <div class="widget-header bordered-bottom bordered-themeprimary">
+                    <span class="widget-caption">Comment</span>
+                    <div class="widget-buttons">
+                        <a href="#" data-toggle="maximize">
+                            <i class="fa fa-expand"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main no-padding">
+                        <textarea name="content" id="summernote"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ./ tabs content -->
+
+
+    <!-- Form Actions -->
+
+    <div class="form-group">
+        <div class="col-md-12">
+            <button onclick="javascript:window.location.href='<?php echo e(url('admin/staff')); ?>'; return false;" type="reset" class="btn btn-sm btn-warning">
+                <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+            </button>
+            <button type="submit" class="btn btn-sm btn-success">
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                <?php if(isset($staff)): ?>
+                Edit
+                <?php else: ?>
+                Create
+                <?php endif; ?>
+            </button>
+        </div>
+    </div>
+    <!-- ./ form actions -->
+
+</form>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script src="<?php echo e(url(asset('public/assets/js/editors/summernote/summernote.js'))); ?>"></script>
+<script>
+    $('#summernote').summernote({ height: 300 });
+</script>
+<script src="<?php echo e(url(asset('public/assets/js/knob/jquery.knob.js'))); ?>"></script>
+<script type="text/javascript">
+    $(".knob").knob();
+</script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('html.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

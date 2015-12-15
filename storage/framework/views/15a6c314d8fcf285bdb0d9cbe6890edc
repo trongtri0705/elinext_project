@@ -1,0 +1,15 @@
+<?php foreach($level as $key => $value): ?>
+    <?php if($key%3==1): ?> 
+        <?php $color = 'colored-success';?>
+    <?php elseif($key%3==2): ?> 
+        <?php $color = 'colored-danger';?> 
+    <?php else: ?> 
+        <?php $color = 'colored-primary';?>
+    <?php endif; ?>
+<div class="radio">
+    <label>
+        <input value="<?php echo e($value->id); ?>" name="rdbLevel" checked="<?php if($value->id==$staff->level_id): ?> <?php echo e('checked'); ?><?php endif; ?>" type="radio" class="<?php echo e($color); ?>">
+        <span class="text"><?php echo e($value->name); ?></span>
+    </label>
+</div>
+<?php endforeach; ?>

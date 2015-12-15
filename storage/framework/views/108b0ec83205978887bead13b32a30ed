@@ -1,0 +1,205 @@
+<?php /* Content */ ?>
+<?php $__env->startSection('crumb'); ?>
+<ul class="breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="<?php echo e(url()); ?>">Home</a>
+    </li>
+    <li>
+        <a href="<?php echo e(url('admin/staff')); ?>">Staff</a>
+    </li>
+    <li class="active"><?php if(isset($staff)): ?>
+        Edit
+        <?php else: ?>
+        Create
+        <?php endif; ?></li>
+    </ul>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('content'); ?>
+    <!-- Tabs -->
+    <div class="col-lg-12">
+        <!-- <?php echo $__env->make('html.block.message', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?> -->
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-general" data-toggle="tab"></a></li>
+    </ul>
+    <!-- ./ tabs -->
+    <?php if(isset($staff)): ?>
+    <?php echo Form::model($staff, array('url' => URL::to('admin/staff') . '/' . $staff->id, 'method' => 'put','id'=>'fupload', 'class' => 'bf', 'files'=> true)); ?>
+
+    <?php else: ?>
+    <?php echo Form::open(array('url' => URL::to('admin/staff'), 'method' => 'post', 'class' => 'bf','id'=>'fupload', 'files'=> true)); ?>
+
+    <?php endif; ?>
+    <!-- Tabs Content -->
+    <div class="tab-content">
+        <!-- General tab -->
+        <div class="tab-pane active" id="tab-general">        
+            <div class="form-group">        
+                <label>Email</label><sup class="danger"><b>*</b></sup>
+                <span class="input-icon">
+                    <input <?php if(isset($staff)): ?><?php echo e("disabled"); ?><?php endif; ?> type="email" class="form-control" name="txtEmail" placeholder="Please Enter Email" value="<?php echo old('txtEmail',isset($staff)? $staff['email'] :null); ?>"/>
+                    <i class="fa fa-envelope info circular"></i>
+                </span>
+                <?php if($errors->has('txtEmail')): ?><span class='help-block'><?php echo e($errors->first('txtEmail', ':message')); ?></span><?php endif; ?>            
+            </div>            
+            <?php if(!isset($staff)): ?> 
+            <div class="form-group">
+                <label>Password</label><sup class="danger"><b>*</b></sup>
+                <span class="input-icon">
+                    <input <?php if(isset($staff)): ?><?php echo e("disabled"); ?><?php endif; ?> type="password" class="form-control" name="txtPass" placeholder="Please Enter Password"/>
+                    <i class="fa fa-qrcode success circular"></i>
+                </span>                    
+                <?php if($errors->has('txtPass')): ?><span class='help-block'><?php echo e($errors->first('txtPass', ':message')); ?></span><?php endif; ?>
+            </div>                
+            <div class="form-group">
+                <label>Retype Password</label><sup class="danger"><b>*</b></sup>                  
+                <span class="input-icon">
+                    <input type="password" class="form-control" name="txtRePass" placeholder="Please Retype Password"/>
+                    <i class="fa fa-qrcode darkgrey circular"></i>
+                </span>
+                <?php if($errors->has('txtRePass')): ?><span class='help-block'><?php echo e($errors->first('txtRePass', ':message')); ?></span><?php endif; ?>
+            </div>
+            <?php endif; ?>
+            <div class="form-group">
+                <label>Name</label><sup class="danger"><b>*</b></sup>
+                <span class="input-icon">
+                    <input <?php if(isset($staff)): ?><?php echo e("disabled"); ?><?php endif; ?> class="form-control" name="txtName" placeholder="Please Enter Staff Name" value="<?php echo old('txtName',isset($staff)? $staff['name'] :null); ?>" />
+                    <i class="fa fa-user darkorange circular"></i>
+                </span>
+                <?php if($errors->has('txtName')): ?><span class='help-block'><?php echo e($errors->first('txtName', ':message')); ?></span><?php endif; ?>
+            </div>
+            <div class="form-group">
+                <label>Department</label><sup class="danger"><b>*</b></sup>
+                <span class="input-icon">                    
+                    <select class="selectpicker" name="sltDepartment">
+                        <option value="">Choose a department...</option>
+                        <?php if(isset($staff)): ?> 
+                        <?php foreach($department as $item): ?>
+                        <?php if($item->id==$staff->department_id): ?>
+                        <option value="<?php echo e($item->id); ?>" selected="selected"><?php echo e($item->name); ?></option>
+                        <?php else: ?>
+                        <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                        <?php else: ?>
+                        <?php foreach($department as $item): ?>
+                        <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
+                        <?php endforeach; ?>
+                        <?php endif; ?>                
+                    </select>
+                </span>
+                <?php if($errors->has('sltDepartment')): ?><span class='help-block'><?php echo e($errors->first('sltDepartment', ':message')); ?></span><?php endif; ?>
+            </div> 
+            <div class="form-group">
+                <label>Role</label><sup class="danger"><b>*</b></sup>
+                <span class="input-icon">                    
+                    <select class="selectpicker" name="sltRole" id="role">
+                        <option value="">Choose a role...</option>                            
+                        <?php foreach($role as $item): ?>                                
+                        <option value="<?php echo e($item->id); ?>" <?php if(isset($staff) && $staff->role_id == $item->id): ?><?php echo e("selected=selected"); ?><?php endif; ?>><?php echo e($item->name); ?></option>                                
+                        <?php endforeach; ?>                                              
+                    </select>
+                </span>
+                <?php if($errors->has('sltRole')): ?><span class='help-block'><?php echo e($errors->first('sltRole', ':message')); ?></span><?php endif; ?>
+            </div>
+            <div class="form-group">
+                <label>Level</label><sup class="danger"><b>*</b></sup>
+                <div style="border:1px solid #d5d5d5; padding-left:20px;" class="form-group" id="level">                        
+                </div>
+                <?php if($errors->has('rdbLevel')): ?><span class='help-block'><?php echo e($errors->first('rdbLevel', ':message')); ?></span><?php endif; ?>
+            </div>  
+            <?php if(isset($staff)): ?>
+            <div class="form-group">
+                <label>Status</label>
+                <div style="border:1px solid #d5d5d5; padding-left:20px;" class="form-group">                        
+                    <div class="radio">
+                        <label>
+                        <input value="1" name="rdbStatus" <?php if($staff->active==1): ?><?php echo e('checked=checked'); ?><?php endif; ?> type="radio" class="colored-primary">
+                            <span class="text">Active</span>
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input value="0" name="rdbStatus" <?php if($staff->active==0): ?> <?php echo e('checked=checked'); ?> <?php endif; ?> type="radio" class="colored-danger">
+                            <span class="text">Inactive</span>
+                        </label>
+                    </div>
+                </div>
+                <?php if($errors->has('rdbLevel')): ?><span class='help-block'><?php echo e($errors->first('rdbLevel', ':message')); ?></span><?php endif; ?>
+            </div> 
+            <?php endif; ?>               
+            <div class="row">
+                <div class="form-group col-lg-6 col-sm-6 col-xs-12">
+                    <label>Phone</label>
+                    <span class="input-icon">    
+                        <input <?php if(isset($staff)): ?><?php echo e("disabled"); ?><?php endif; ?> class="form-control" name="txtPhone" placeholder="Please Enter Phone" type='tel' pattern='\d{10,11}' value="<?php echo old('txtPhone',isset($staff)? $staff['phone'] :null); ?>" />
+                        <?php if(!isset($staff)): ?><span>format: 0123456789(0)</span><?php endif; ?>
+                        <i class="fa fa-phone primary circular"></i>
+                    </span>
+                    <?php if($errors->has('txtPhone')): ?><span class='help-block'><?php echo e($errors->first('txtPhone', ':message')); ?></span><?php endif; ?>
+                </div> 
+                <div class="form-group col-lg-6 col-sm-6 col-xs-12">
+                    <label>Birth Day</label><sup class="danger"><b>*</b></sup>
+                    <span class="input-icon">
+                        <input <?php if(isset($staff)): ?><?php echo e("disabled"); ?><?php endif; ?> class="form-control" type="text" id="datepicker" name="txtBirth" size="20" value="<?php echo old('txtBirth',isset($staff)? $staff['birthday'] :null); ?>" placeholder="Please Enter Birthday "/>            
+                        <i class="fa fa-birthday-cake purple circular"></i>
+                    </span>
+                    <?php if($errors->has('txtBirth')): ?><span class='help-block'><?php echo e($errors->first('txtBirth', ':message')); ?></span><?php endif; ?>
+                </div> 
+            </div>                                 
+            <!-- ./ general tab -->
+        </div>
+        <!-- ./ tabs content -->
+    </div>
+
+    <!-- Form Actions -->
+
+    <div class="form-group">
+        <div class="col-md-12">
+            <button onclick="javascript:window.location.href='<?php echo e(url('admin/staff')); ?>'; return false;" type="reset" class="btn btn-sm btn-warning">
+                <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+            </button>
+            <button type="submit" class="btn btn-sm btn-success">
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                <?php if(isset($staff)): ?>
+                Edit
+                <?php else: ?>
+                Create
+                <?php endif; ?>
+            </button>
+        </div>
+    </div>
+    <!-- ./ form actions -->
+
+</form>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<?php if(isset($staff)): ?>
+<script>
+    $(document).ready(function(){ 
+        $.get("<?php echo e(url('admin/staff/getcurrentlevel/'.$staff->id)); ?>"+"/" + $('#role').val(), function(data) {                        
+            $("#level").html(data);
+        });        
+    })
+</script>
+<?php else: ?>
+<script>
+    $(document).ready(function(){ 
+        $.get("<?php echo e(url('admin/staff/getlevel/')); ?>"+"/" + $('#role').val(), function(data) {                        
+            $("#level").html(data);
+        });          
+    })
+</script>
+<?php endif; ?>
+<script type="text/javascript">
+    $(document).ready(function(){                    
+        $('#role').change(function(){
+            $.get("<?php echo e(url('admin/staff/getlevel/')); ?>"+"/" + $(this).val(), function(data) {                        
+                $("#level").html(data);
+            }); 
+        });        
+    })
+</script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('html.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,379 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title><?php echo e(isset($title) ? $title : ''); ?></title>
+    <meta name="description" content="<?php echo e(isset($title) ? $title : ''); ?>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="<?php echo e(asset('public/assets/images/favicon.png')); ?>" type="image/x-icon">
+    
+
+    <!--Basic Styles-->
+    <link href="<?php echo e(url(asset('public/assets/css/mycss.css'))); ?>" rel="stylesheet" />
+    <link href="<?php echo e(url(asset('public/assets/css/bootstrap.min.css'))); ?>" rel="stylesheet" />
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+    <link href="<?php echo e(url(asset('public/assets/css/font-awesome.min.css'))); ?>" rel="stylesheet" />
+    <link href="<?php echo e(url(asset('public/assets/css/weather-icons.min.css'))); ?>" rel="stylesheet" />
+    <!--Fonts-->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300"
+    rel="stylesheet" type="text/css">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="<?php echo e(url(asset('public/assets/css/beyond.min.css'))); ?>" rel="stylesheet" />
+    <link href="<?php echo e(url(asset('public/assets/css/demo.min.css'))); ?>" rel="stylesheet" />
+    <link href="<?php echo e(url(asset('public/assets/css/typicons.min.css'))); ?>" rel="stylesheet" />
+    <link href="<?php echo e(url(asset('public/assets/css/animate.min.css'))); ?>" rel="stylesheet" />    
+    
+    
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+    <link href="<?php echo e(url(asset('public/assets/css/dataTables.bootstrap.css'))); ?>" rel="stylesheet" />   
+    <script src="<?php echo e(url(asset('public/assets/js/skins.js'))); ?>"></script>
+    <link href="<?php echo asset('public/assets/css/jquery-ui.css'); ?>" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+    <link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+    <?php echo $__env->yieldContent('css'); ?>
+</head>
+<body>
+    <!-- Loading Container -->
+    <div class="loading-container">
+        <div class="loader"></div>
+    </div>
+    <!--  /Loading Container -->
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="navbar-container">
+                <!-- Navbar Barnd -->
+                <div class="navbar-header pull-left">
+                    <a href="<?php echo e(url()); ?>" class="navbar-brand">
+                        <small>
+                            <img src="<?php echo e(url(asset('public/assets/img/logo.png'))); ?>" alt="" />
+                        </small>
+                    </a>
+                </div>
+                <!-- /Navbar Barnd -->
+                <!-- Sidebar Collapse -->
+                <div class="sidebar-collapse" id="sidebar-collapse">
+                    <i class="collapse-icon fa fa-bars"></i>
+                </div>
+                <!-- /Sidebar Collapse -->
+                <!-- Account Area and Settings -->
+                <div class="navbar-header pull-right">
+                    <div class="navbar-account">
+                        <ul class="account-area">                            
+                            <li>
+                                <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                                    <div class="avatar" title="View your public profile">
+                                        <img src="<?php echo e(asset('public/assets/images/'.getImage(Auth::user()->id))); ?>"  onerror="this.src = '<?php echo asset("public/assets/images/default.jpg"); ?>'" alt="">
+                                    </div>
+                                    <section>
+                                        <h2><span class="profile"><span><?php if(Auth::user()->name == ""): ?> <?php echo Auth::user()->email; ?> <?php else: ?> <?php echo Auth::user()->name; ?> <?php endif; ?></span></span></h2>
+                                    </section>
+                                </a>
+                                <!--Login Area Dropdown-->
+                                <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area" style="min-width:186px;">
+                                    <li class="username"><a><?php if(Auth::user()->name == ""): ?> <?php echo e("No Name"); ?> <?php else: ?> <?php echo Auth::user()->name; ?> <?php endif; ?></a></li>
+                                    <li class="email"><a><?php echo Auth::user()->email; ?></a></li>
+                                    <!--Avatar Area-->
+                                    <li>
+                                        <div class="avatar-area">
+                                            <img src="<?php echo url('public/assets/images/'.getImage(Auth::user()->id)); ?>" onerror="this.src = '<?php echo asset("public/assets/images/default.jpg"); ?>'" alt="" class="avatar">                                            
+                                        </div>
+                                    </li>
+                                    <!--Avatar Area-->
+                                    <li class="edit">
+                                        <a href="<?php echo e(url('admin/profile')); ?>" class="pull-left">Profile</a>
+                                        <a href="<?php echo e(url('admin/changepassword')); ?>" class="pull-right">Change Password</a>
+                                    </li>
+                                    <!--Theme Selector Area-->
+                                    <li class="theme-area">
+                                        <ul class="colorpicker" id="skin-changer">
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#5DB2FF;" rel="<?php echo e(url(asset('public/assets/css/skins/blue.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#2dc3e8;" rel="<?php echo e(url(asset('public/assets/css/skins/azure.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#03B3B2;" rel="<?php echo e(url(asset('public/assets/css/skins/teal.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#53a93f;" rel="<?php echo e(url(asset('public/assets/css/skins/green.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#FF8F32;" rel="<?php echo e(url(asset('public/assets/css/skins/orange.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#cc324b;" rel="<?php echo e(url(asset('public/assets/css/skins/pink.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#AC193D;" rel="<?php echo e(url(asset('public/assets/css/skins/darkred.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#8C0095;" rel="<?php echo e(url(asset('public/assets/css/skins/purple.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#0072C6;" rel="<?php echo e(url(asset('public/assets/css/skins/darkblue.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#585858;" rel="<?php echo e(url(asset('public/assets/css/skins/gray.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#474544;" rel="<?php echo e(url(asset('public/assets/css/skins/black.min.css'))); ?>"></a></li>
+                                            <li><a class="colorpick-btn" href="javascript:void(0)" style="background-color:#001940;" rel="<?php echo e(url(asset('public/assets/css/skins/deepblue.min.css'))); ?>"></a></li>
+                                        </ul>
+                                    </li>
+                                    <!--/Theme Selector Area-->
+                                    <li class="dropdown-footer">
+                                        <a href="<?php echo e(url('auth/logout')); ?>">
+                                            Sign out
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!--/Login Area Dropdown-->
+                            </li>
+                            <!-- /Account Area -->
+                            <!--Note: notice that setting div must start right after account area list.
+                            no space must be between these elements-->
+                            <!-- Settings -->
+                        </ul><div class="setting">
+                        <a id="btn-setting" title="Setting" href="#">
+                            <i class="icon glyphicon glyphicon-cog"></i>
+                        </a>
+                    </div><div class="setting-container">
+                    <label>
+                        <input type="checkbox" id="checkbox_fixednavbar">
+                        <span class="text">Fixed Navbar</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="checkbox_fixedsidebar">
+                        <span class="text">Fixed SideBar</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="checkbox_fixedbreadcrumbs">
+                        <span class="text">Fixed BreadCrumbs</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="checkbox_fixedheader">
+                        <span class="text">Fixed Header</span>
+                    </label>
+                </div>
+                <!-- Settings -->
+            </div>
+        </div>
+        <!-- /Account Area and Settings -->
+    </div>
+</div>
+</div>
+<!-- /Navbar -->
+<!-- Main Container -->
+<div class="main-container container-fluid">
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        <div class="page-sidebar" id="sidebar">                
+            <!-- Sidebar Menu -->
+            <ul class="nav sidebar-menu">
+                <!--Dashboard-->
+                <li>
+                    <a href="<?php echo e(url()); ?>">
+                        <i class="menu-icon glyphicon glyphicon-home"></i>
+                        <span class="menu-text"> Dashboard </span>
+                    </a>
+                </li>                    
+                <!--Department-->
+                <?php if(Auth::user()->role_id==4): ?>
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-list"></i>
+                        <span class="menu-text"> Departments </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="<?php echo e(url('admin/department/create')); ?>">
+                                <span class="menu-text">Add</span>
+                            </a>
+                        </li>                            
+                        <li>
+                            <a href="<?php echo e(url('admin/department')); ?>">
+                                <span class="menu-text">List</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <?php endif; ?>
+                <!--Level-->
+                <?php if(Auth::user()->role_id==4): ?>
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-tasks"></i>
+                        <span class="menu-text"> Level </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="<?php echo e(url('admin/level/create')); ?>">
+                                <span class="menu-text">Add</span>
+                            </a>
+                        </li>                            
+                        <li>
+                            <a href="<?php echo e(url('admin/level')); ?>">
+                                <span class="menu-text">List</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <?php endif; ?>                
+                <!-- Staff -->
+                <?php if(Auth::user()->role_id==2||Auth::user()->role_id==4): ?>
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-user"></i>
+                        <span class="menu-text"> Staff </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="<?php echo e(url('admin/staff/create')); ?>">
+                                <span class="menu-text">Add</span>
+                            </a>
+                        </li>                            
+                        <li>
+                            <a href="<?php echo e(url('admin/staff')); ?>">
+                                <span class="menu-text">List</span>
+                            </a>
+                        </li>
+
+                    </ul>                       
+                </li>               
+                <?php endif; ?>
+                <!-- Teams -->
+                <?php if(Auth::user()->role_id>2): ?>
+                <li>
+                    <a href="#" class="menu-dropdown">
+                        <i class="menu-icon fa fa-users"></i>
+                        <span class="menu-text"> Teams </span>
+
+                        <i class="menu-expand"></i>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="<?php echo e(url('admin/team/manager')); ?>">
+                                <i class="fa fa-asterisk"></i>
+                                <span class="menu-text">Managers</span>
+                            </a>
+                        </li>                            
+                        <li>
+                            <a href="<?php echo e(url('admin/team/leader')); ?>">
+                                <i class="fa fa-gears"></i>
+                                <span class="menu-text">Leaders</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <?php endif; ?>
+                <!-- Review -->
+                <?php if(Auth::user()->role_id<3): ?>
+                <li>
+                    <a href="<?php echo e(url('admin/review')); ?>" class="menu-dropdown">
+                        <span class="typcn typcn-social-instagram"></span>
+                        <span class="menu-text"> My Reviews </span>
+                    </a>                    
+                </li>               
+                <?php endif; ?>
+                <li>                    
+                    <a class="title">You're a <?php echo e(Auth::user()->role->name); ?> <?php if(Auth::user()->department): ?>in <?php echo e(Auth::user()->department->name); ?><?php endif; ?></a>                                                                                             
+                </li>                              
+            </ul>
+            <!-- /Sidebar Menu -->
+        </div>
+        <!-- /Page Sidebar -->
+       
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <?php echo $__env->yieldContent('crumb'); ?>
+                <span class="pull-right" style="margin-right:20px"><a class="btn btn-info" href="<?php echo e(url('admin/help')); ?>">Help <i class="fa fa-warning right"></i></a></span>
+            </div>
+            <!-- /Page Breadcrumb -->
+            <!-- Page Header -->
+            <div class="page-header position-relative">
+                <div class="header-title">
+                    <h1>
+                        <?php echo e(isset($title) ? $title : ''); ?>
+
+                    </h1>
+                </div>
+                <!--Header Buttons-->
+                <div class="header-buttons">
+                    <a class="sidebar-toggler" href="#">
+                        <i class="fa fa-arrows-h"></i>
+                    </a>
+                    <a class="refresh" id="refresh-toggler" href="">
+                        <i class="glyphicon glyphicon-refresh"></i>
+                    </a>
+                    <a class="fullscreen" id="fullscreen-toggler" href="#">
+                        <i class="glyphicon glyphicon-fullscreen"></i>
+                    </a>
+                </div>
+                <!--Header Buttons End-->
+            </div>
+            <!-- /Page Header -->
+            <!-- Page Body -->
+            <div class="page-body">
+                <!-- Your Content Goes Here -->
+                <?php echo $__env->yieldContent('content'); ?>
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+    <!-- /Page Container -->
+    <!-- Main Container -->
+
+</div>
+
+<!--Basic Scripts-->
+
+<script src="<?php echo e(url(asset('public/assets/js/jquery.min.js'))); ?>"></script>
+<script src="<?php echo e(url(asset('public/assets/js/bootstrap.min.js'))); ?>"></script>
+<script src="<?php echo e(url(asset('public/assets/js/slimscroll/jquery.slimscroll.min.js'))); ?>"></script>
+
+<!--Beyond Scripts-->
+<script src="<?php echo e(url(asset('public/assets/js/beyond.min.js'))); ?>"></script>
+
+<!--Page Related Scripts-->
+<script src="<?php echo e(url(asset('public/assets/js/datatable/jquery.dataTables.min.js'))); ?>"></script>    
+<script src="<?php echo e(url(asset('public/assets/js/datatable/ZeroClipboard.js'))); ?>"></script>
+<script src="<?php echo e(url(asset('public/assets/js/datatable/dataTables.tableTools.min.js'))); ?>"></script>
+<script src="<?php echo e(url(asset('public/assets/js/datatable/dataTables.bootstrap.min.js'))); ?>"></script>
+<script src="<?php echo asset('public/assets/js/jquery-ui.js'); ?>"></script>
+<script src="<?php echo e(url(asset('public/assets/js/myscript.js'))); ?>"></script>
+<script src="<?php echo e(url(asset('public/assets/js/bootbox/bootbox.js'))); ?>"></script>
+<?php echo $__env->yieldContent('script'); ?>
+<script>
+    $('a.delete').click(function (e) {
+        e.preventDefault();
+
+        bootbox.confirm("Are you sure?", function (result) {
+            if (result) {
+                //
+                 // $(this).closest('form').submit();
+                 document.location.href = (e.target.href);
+             }else return;
+         });
+    });            
+    $("div.alert").delay(15000).slideUp();
+
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#table').DataTable({
+            "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
+        });
+    });
+</script>
+<script>
+  $(function() {     
+    $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd',showAnim: 'drop', changeMonth: true,
+      changeYear: true,yearRange: '1990:2015'});
+});
+</script>
+</body>
+<!--  /Body -->
+</html>

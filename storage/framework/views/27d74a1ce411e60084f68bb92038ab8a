@@ -1,0 +1,70 @@
+<?php /* Content */ ?>
+<?php $__env->startSection('crumb'); ?>
+<ul class="breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="<?php echo e(url()); ?>">Home</a>
+    </li>
+    <li>
+        <a href="<?php echo e(url('admin/department')); ?>">Department</a>
+    </li>
+    <li class="active"><?php if(isset($department)): ?>
+        Edit
+        <?php else: ?>
+        Create
+        <?php endif; ?></li>
+    </ul>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('content'); ?>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-general" data-toggle="tab"></a></li>
+    </ul>
+    <!-- ./ tabs -->
+    <?php if(isset($department)): ?>
+    <?php echo Form::model($department, array('url' => URL::to('admin/department') . '/' . $department->id, 'method' => 'put','id'=>'fupload', 'class' => 'bf', 'files'=> true)); ?>
+
+    <?php else: ?>
+    <?php echo Form::open(array('url' => URL::to('admin/department'), 'method' => 'post', 'class' => 'bf','id'=>'fupload', 'files'=> true)); ?>
+
+    <?php endif; ?>
+    <!-- Tabs Content -->
+    <div class="tab-content">
+        <!-- General tab -->
+        <div class="tab-pane active" id="tab-general">
+
+            <div class="form-group">
+                <label>Name</label><sup class="danger">*</sup>
+                <span class="input-icon">
+                    <input class="form-control" name="txtName" placeholder="Please Enter Department Name" value="<?php echo old('txtName',isset($department)? $department['name'] :null); ?>" autofocus />
+                    <i class="fa fa-home sky circular"></i>
+                </span>
+                <?php if($errors->has('txtName')): ?><span class='help-block'><?php echo e($errors->first('txtName', ':message')); ?></span><?php endif; ?>            
+            </div>     
+            <!-- ./ general tab -->
+        </div>
+        <!-- ./ tabs content -->
+    </div>
+
+    <!-- Form Actions -->
+
+    <div class="form-group">
+        <div class="col-md-12">
+            <button onclick="javascript:window.location.href='<?php echo e(url('admin/department')); ?>'; return false;" type="reset" class="btn btn-sm btn-warning">
+                <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+            </button>
+            <button type="submit" class="btn btn-sm btn-success">
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                <?php if(isset($department)): ?>
+                Edit
+                <?php else: ?>
+                Create
+                <?php endif; ?>
+            </button>
+        </div>
+    </div>
+    <!-- ./ form actions -->
+
+</form>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('html.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
